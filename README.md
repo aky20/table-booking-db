@@ -1,9 +1,9 @@
 # CRUD Table Booking with sqlite
-## CRUD (flasksqlalchemy)
+## CRUD (flask-sqlalchemy)
 
 - [flask](https://github.com/aky20/Flask)
 - jinja
-- flasksqlalchemy
+- flask-sqlalchemy
 
 ### create database
 ```
@@ -24,6 +24,8 @@ class Booking(db.Model):
     total_consumers = db.Column(db.Integer, nullable=False)
     floor = db.Column(db.String(10), nullable=False)
     time = db.Column(db.String(10), nullable=False)
+    
+db.create_all()
 ```
 
 ### read data
