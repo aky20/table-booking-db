@@ -218,7 +218,7 @@ def update():
 @app.route("/delete", methods=['GET', 'POST'])
 def delete():
     # find by id
-    delete_booking = Booking.query.filter_by(id=request.args['id']).first()
+    delete_booking = Booking.query.get(request.args['id'])
 
     # delete row
     db.session.delete(delete_booking)
