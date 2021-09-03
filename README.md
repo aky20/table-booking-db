@@ -177,7 +177,7 @@ def book():
 #flask
 @app.route("/update", methods=['GET', 'POST'])
 def update():
-    update_booking = Booking.query.filter_by(id=request.args['id']).first()
+    update_booking = Booking.query.get(request.args['id'])
     if request.method == 'POST':
         # update booking data to database
         update_booking.name = request.form['name']
@@ -186,6 +186,23 @@ def update():
         update_booking.floor = request.form['floor']
         update_booking.time = request.form['time']
         db.session.add(update_booking)
+        db.session.commit()
+        return redirect(url_for("home"))
+
+    # pass the current data to update form
+    print(update_booking)
+    return render_template("update.html", update_booking=update_booking)
+```
+
+Or
+
+```
+@app.route("/update", methods=['GET', 'POST'])
+def update():
+    update_booking = Booking.query.get(request.args['id'])
+    if request.method == 'POST':
+        # update only phone-number data to database
+        update_booking.phone_number=request.form['phone_number']
         db.session.commit()
         return redirect(url_for("home"))
 
