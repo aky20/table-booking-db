@@ -225,4 +225,59 @@ def delete():
     db.session.commit()
     return redirect(url_for("home"))
 ```
+-------------------------------------
+# One to Many Relationship 
 
+### Create Database
+```
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///student.db"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+```
+
+### Create Table
+- One class has Many students
+```
+# One
+class Class(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), nullable=False)
+    students = db.relationship('Student', backref='classroom')
+
+# Many
+class Student(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
+```
+- backref (backreference make Student class to have classroom column and you have to initialize an object to classroom property)
+- db.ForeignKey (primarykey of Parent Table)
+
+### Create rows to Class Table
+```
+B = Class(name='Class_C')
+db.session.add(B)
+db.session.commit()
+```
+
+### Create rows to Student Table
+```
+A = Class.query.get(3)
+emma = Student(name='Cho', classroom=A)
+db.session.add(emma)
+db.session.commit()
+```
+- initialize A to classroom property and then class_id of student emma become A.id
+
+### Use Data
+#### Get all students attends in Class B
+```
+class_B = Class.query.filter_by(name='Class_B').first()
+print(class_B.students)
+```
+
+#### Get the id of Jo classroom
+```
+classroom_id = Student.query.filter_by(name='Jo').first().class_id
+print(classroom_id)
+```
